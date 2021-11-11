@@ -24,7 +24,7 @@ class Board:
     def full_row_divider(self):
         return self.join_row(self.row_dividers())
 
-    def game_row(self):
+    def empty_row(self):
         output_list = []
         section = '|   '
         for i in self.column_range:
@@ -39,7 +39,7 @@ class Board:
         board = [self.full_column_label()]
         for row in self.row_range:
             board.append(self.full_row_divider())
-            board.append(self.join_row(self.game_row()))
+            board.append(self.join_row(self.empty_row()))
         board.pop()
         return board
 
@@ -48,5 +48,5 @@ class Board:
             print(row)
 
 
-b = Board()
-b.print_board()
+# b = Board()
+# b.print_board()

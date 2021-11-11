@@ -28,22 +28,22 @@ class TestBoard(unittest.TestCase):
         full_row_divider = self.board.full_row_divider()
         self.assertEqual(full_row_divider, '+---+---+---+---+---+---+---+')
 
-    def test_game_row(self):
-        empty_row = self.board.game_row()
+    def test_empty_row(self):
+        empty_row = self.board.empty_row()
         self.assertEqual(len(empty_row), 7)
         for cell in empty_row[0:5]:
             self.assertEqual(cell, '|   ')
         self.assertEqual(empty_row[6], '|   |')
 
     def test_join_row(self):
-        empty_row = self.board.game_row()
+        empty_row = self.board.empty_row()
         self.assertEqual(self.board.join_row(empty_row), '|   |   |   |   |   |   |   |')
 
     def test_board_setup(self):
         board = self.board.board_setup()
         labels = self.board.full_column_label()
         divider = self.board.full_row_divider()
-        empty_row = self.board.join_row(self.board.game_row())
+        empty_row = self.board.join_row(self.board.empty_row())
         self.assertEqual(board[0], labels)
         for index, row in enumerate(board[1:-1]):
             if index % 2 == 0:
