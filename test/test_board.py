@@ -64,8 +64,8 @@ class TestBoard(unittest.TestCase):
                 self.assertEqual(row, divider)
             else:
                 self.assertEqual(row, empty_row)
-        print("\n")
-        self.board.print_board()
+        # print("\n")
+        # self.board.print_board()
 
 
 if __name__ == '__main__':

@@ -17,7 +17,7 @@ class TestTurn(unittest.TestCase):
             self.assertEqual(len(self.turn.board[index]), 7)
         self.assertEqual(self.turn.join_row(self.empty_row), ''.join(self.empty_row))
 
-    def test_place_piece(self):
+    def test_place_valid_piece(self):
         self.assertEqual(self.first_row[0], '|   ')
         self.turn.place_piece('R', 1)
         self.assertEqual(self.first_row[0], '| R ')
@@ -30,7 +30,7 @@ class TestTurn(unittest.TestCase):
         self.assertEqual(self.first_row[0], '| R ')
         self.assertEqual(self.second_row[0], '| B ')
 
-    def test_place_piece(self):
+    def test_place_invalid_piece(self):
         self.turn.place_piece('B', 7)
         self.turn.place_piece('B', 7)
         self.turn.place_piece('B', 7)
@@ -42,8 +42,10 @@ class TestTurn(unittest.TestCase):
         self.turn.place_piece('B', 1)
         self.turn.place_piece('R', 1)
         self.turn.place_piece('B', 1)
-        print("\n")
-        self.turn.render_board()
+        # print("\n")
+        # self.turn.render_board()
+        # self.turn.place_piece('B', 1)
+        self.assertEqual(self.turn.invalid_placement(), "Sorry! Can't place a piece there, please try another move.")
 
 
 if __name__ == '__main__':
