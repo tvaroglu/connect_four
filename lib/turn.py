@@ -11,19 +11,24 @@ class Turn:
     def invalid_color(self):
         return 'Sorry! Invalid color, please try again.'
 
+    def piece_placed(self):
+        return 'Nice move!'
+
     def place_piece(self, color, column_number, row_index=0):
         column_index = int(column_number) - 1
         if row_index > 5 or column_index not in range(0, 7):
-            print(self.invalid_placement())
+            return self.invalid_placement()
         elif color not in self.valid_colors:
-            print(self.invalid_color())
+            return self.invalid_color()
         else:
             row_placement = self.game_rows[row_index]
             net_placement = self.board[row_placement][column_index]
             if net_placement == self.valid_positions[0]:
                 self.board[row_placement][column_index] = f'| {color} '
+                return self.piece_placed()
             elif net_placement == self.valid_positions[1]:
                 self.board[row_placement][column_index] = f'| {color} |'
+                return self.piece_placed()
             else:
                 return self.place_piece(color, column_number, row_index + 1)
 
