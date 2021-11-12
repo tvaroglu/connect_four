@@ -39,6 +39,38 @@ class Turn:
                 winning_color = 'Red'
         return winning_color
 
+    def aggregate_columns(self):
+        col_1 = []
+        col_2 = []
+        col_3 = []
+        col_4 = []
+        col_5 = []
+        col_6 = []
+        col_7 = []
+        for index, row in enumerate(self.board):
+            if index in self.game_rows:
+                col_1.append(row[0])
+                col_2.append(row[1])
+                col_3.append(row[2])
+                col_4.append(row[3])
+                col_5.append(row[4])
+                col_6.append(row[5])
+                col_7.append(row[6][0:-1])
+        return (col_1, col_2, col_3, col_4, col_5, col_6, col_7)
+
+    def evaluate_columns(self, aggregated_columns):
+        winning_color = ''
+        black_wins = '| B | B | B | B |'
+        red_wins = '| R | R | R | R |'
+        for column in aggregated_columns:
+            column[-1] = f'{column[-1]}|'
+            joined = self.join_row(column)
+            if black_wins in joined:
+                winning_color = 'Black'
+            elif red_wins in joined:
+                winning_color = 'Red'
+        return winning_color
+
     def join_row(self, row):
         return ''.join(row)
 

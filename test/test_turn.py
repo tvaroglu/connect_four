@@ -9,6 +9,7 @@ class TestTurn(unittest.TestCase):
         self.first_row = self.turn.board[self.turn.game_rows[0]]
         self.second_row = self.turn.board[self.turn.game_rows[1]]
         self.empty_row = ['|   ', '|   ', '|   ', '|   ', '|   ', '|   ', '|   |']
+        self.empty_column = ['|   ', '|   ', '|   ', '|   ', '|   ', '|   |']
 
     def test_game_rows(self):
         for index in self.turn.game_rows:
@@ -43,9 +44,7 @@ class TestTurn(unittest.TestCase):
         self.turn.place_piece('B', 1)
         self.turn.place_piece('R', 1)
         self.turn.place_piece('B', 1)
-        # print("\n")
-        # self.turn.render_board()
-        # self.turn.place_piece('B', 1)
+        self.turn.place_piece('B', 7)
         self.assertEqual(self.turn.invalid_placement(), "Sorry! Can't place a piece there, please try another move.")
 
     def test_evaluate_rows_black_wins(self):
@@ -64,6 +63,33 @@ class TestTurn(unittest.TestCase):
         self.turn.place_piece('B', 3)
         self.turn.place_piece('R', 4)
         self.assertEqual(self.turn.evaluate_rows(), 'Red')
+
+    def test_evaluate_columns_black_wins(self):
+        self.turn.place_piece('R', 6)
+        self.turn.place_piece('R', 6)
+        self.turn.place_piece('B', 7)
+        self.turn.place_piece('B', 7)
+        self.turn.place_piece('B', 7)
+        aggregated = self.turn.aggregate_columns()
+        self.assertEqual(self.turn.evaluate_columns(aggregated), '')
+        for column in aggregated[0:-2]:
+            self.assertEqual(column, self.empty_column)
+        self.assertEqual(aggregated[-2], ['|   ', '|   ', '|   ', '|   ', '| R ', '| R |'])
+        self.assertEqual(aggregated[-1], ['|   ', '|   ', '|   ', '| B ', '| B ', '| B |'])
+        self.turn.place_piece('B', 7)
+        self.assertEqual(self.turn.evaluate_rows(), '')
+        self.assertEqual(self.turn.evaluate_columns(self.turn.aggregate_columns()), 'Black')
+
+    def test_evaluate_columns_red_wins(self):
+        self.turn.place_piece('R', 1)
+        self.turn.place_piece('R', 1)
+        self.turn.place_piece('R', 1)
+        self.assertEqual(self.turn.evaluate_columns(self.turn.aggregate_columns()), '')
+        self.turn.place_piece('B', 7)
+        self.turn.place_piece('R', 1)
+        # print("\n")
+        # self.turn.render_board()
+        self.assertEqual(self.turn.evaluate_columns(self.turn.aggregate_columns()), 'Red')
 
 
 if __name__ == '__main__':
