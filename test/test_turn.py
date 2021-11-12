@@ -43,10 +43,27 @@ class TestTurn(unittest.TestCase):
         self.turn.place_piece('B', 1)
         self.turn.place_piece('R', 1)
         self.turn.place_piece('B', 1)
-        print("\n")
-        self.turn.render_board()
+        # print("\n")
+        # self.turn.render_board()
         # self.turn.place_piece('B', 1)
         self.assertEqual(self.turn.invalid_placement(), "Sorry! Can't place a piece there, please try another move.")
+
+    def test_evaluate_rows_black_wins(self):
+        self.turn.place_piece('B', 1)
+        self.turn.place_piece('B', 2)
+        self.turn.place_piece('B', 3)
+        self.assertEqual(self.turn.evaluate_rows(), '')
+        self.turn.place_piece('B', 4)
+        self.assertEqual(self.turn.evaluate_rows(), 'Black')
+
+    def test_evaluate_rows_red_wins(self):
+        self.turn.place_piece('R', 7)
+        self.turn.place_piece('R', 6)
+        self.turn.place_piece('R', 5)
+        self.assertEqual(self.turn.evaluate_rows(), '')
+        self.turn.place_piece('B', 3)
+        self.turn.place_piece('R', 4)
+        self.assertEqual(self.turn.evaluate_rows(), 'Red')
 
 
 if __name__ == '__main__':

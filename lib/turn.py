@@ -27,6 +27,18 @@ class Turn:
             else:
                 return self.place_piece(color, column_number, row_index + 1)
 
+    def evaluate_rows(self):
+        winning_color = ''
+        black_wins = '| B | B | B | B |'
+        red_wins = '| R | R | R | R |'
+        for row in self.board[2:-1]:
+            joined = self.join_row(row)
+            if black_wins in joined:
+                winning_color = 'Black'
+            elif red_wins in joined:
+                winning_color = 'Red'
+        return winning_color
+
     def join_row(self, row):
         return ''.join(row)
 
