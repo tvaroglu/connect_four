@@ -3,14 +3,20 @@ class Turn:
         self.board = board
         self.game_rows = (12, 10, 8, 6, 4, 2)
         self.valid_positions = ('|   ', '|   |')
+        self.valid_colors = ('B', 'R')
 
     def invalid_placement(self):
         return "Sorry! Can't place a piece there, please try another move."
 
+    def invalid_color(self):
+        return 'Sorry! Invalid color, please try again.'
+
     def place_piece(self, color, column_number, row_index=0):
-        column_index = column_number - 1
-        if row_index > 5:
+        column_index = int(column_number) - 1
+        if row_index > 5 or column_index not in range(0, 7):
             print(self.invalid_placement())
+        elif color not in self.valid_colors:
+            print(self.invalid_color())
         else:
             row_placement = self.game_rows[row_index]
             net_placement = self.board[row_placement][column_index]
