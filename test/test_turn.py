@@ -52,19 +52,19 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('B', 1)
         self.game.place_piece('B', 2)
         self.game.place_piece('B', 3)
-        self.assertEqual(self.game.evaluate_rows(), '')
+        self.assertEqual(self.game.evaluate_sections('rows', self.game.board), '')
         self.game.place_piece('R', 5)
         self.game.place_piece('B', 4)
-        self.assertEqual(self.game.evaluate_rows(), 'Black')
+        self.assertEqual(self.game.evaluate_sections('rows', self.game.board), 'Black')
 
     def test_evaluate_rows_red_wins(self):
         self.game.place_piece('R', 7)
         self.game.place_piece('R', 6)
         self.game.place_piece('R', 5)
-        self.assertEqual(self.game.evaluate_rows(), '')
+        self.assertEqual(self.game.evaluate_sections('rows', self.game.board), '')
         self.game.place_piece('B', 3)
         self.game.place_piece('R', 4)
-        self.assertEqual(self.game.evaluate_rows(), 'Red')
+        self.assertEqual(self.game.evaluate_sections('rows', self.game.board), 'Red')
 
     def test_evaluate_columns_black_wins(self):
         self.game.place_piece('B', 6)
@@ -79,7 +79,7 @@ class TestGame(unittest.TestCase):
         self.assertEqual(aggregated[-2], ['|   ', '|   ', '|   ', '|   ', '| R ', '| B |'])
         self.assertEqual(aggregated[-1], ['|   ', '|   ', '|   ', '| B ', '| B ', '| B |'])
         self.game.place_piece('B', 7)
-        self.assertEqual(self.game.evaluate_rows(), '')
+        self.assertEqual(self.game.evaluate_sections('rows', self.game.board), '')
         self.assertEqual(self.game.evaluate_sections('columns', self.game.aggregate_columns()), 'Black')
 
     def test_evaluate_columns_red_wins(self):
@@ -121,8 +121,8 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('B', 4)
         self.assertEqual(self.game.evaluate_sections('diagonals', self.game.aggregate_diagonals()), '')
         self.game.place_piece('B', 4)
-        # print("\n")
-        # self.game.render_board()
+        print("\n")
+        self.game.render_board()
         self.assertEqual(self.game.evaluate_sections('diagonals', self.game.aggregate_diagonals()), 'Black')
 
 

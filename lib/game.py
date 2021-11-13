@@ -32,16 +32,6 @@ class Game:
             return self.piece_placed()
         return self.place_piece(color, column_number, row_index + 1)
 
-    def evaluate_rows(self):
-        winning_color = ''
-        for row in self.board[2:-1]:
-            joined = self.join_row(row)
-            if self.black_wins in joined:
-                winning_color = 'Black'
-            elif self.red_wins in joined:
-                winning_color = 'Red'
-        return winning_color
-
     def aggregate_columns(self):
         col_1 = []
         col_2 = []
@@ -76,8 +66,7 @@ class Game:
         down_6 = [self.board[2][3], self.board[4][4], self.board[6][5], self.board[8][6]]
         return (up_1, up_2, up_3, up_4, up_5, up_6, down_1, down_2, down_3, down_4, down_5, down_6)
 
-    def evaluate_sections(self, type, aggregated_sections):
-        winning_color = ''
+    def evaluate_sections(self, type, aggregated_sections, winning_color=''):
         for section in aggregated_sections:
             if type == 'columns':
                 section[-1] = self.reformat_last_cell(section[-1])
