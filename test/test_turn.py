@@ -89,9 +89,20 @@ class TestGame(unittest.TestCase):
         self.assertEqual(self.game.evaluate_columns(self.game.aggregate_columns()), '')
         self.game.place_piece('B', 7)
         self.game.place_piece('R', 1)
+        self.assertEqual(self.game.evaluate_columns(self.game.aggregate_columns()), 'Red')
+
+    def test_evaluate_columns_red_wins(self):
+        self.game.place_piece('R', 1)
+        self.game.place_piece('B', 1)
+        self.game.place_piece('B', 1)
+        self.game.place_piece('R', 1)
+        self.game.place_piece('B', 2)
+        self.game.place_piece('R', 2)
+        self.game.place_piece('B', 7)
+        self.game.place_piece('R', 6)
+        self.game.place_piece('R', 6)
         print("\n")
         self.game.render_board()
-        self.assertEqual(self.game.evaluate_columns(self.game.aggregate_columns()), 'Red')
 
 
 if __name__ == '__main__':
