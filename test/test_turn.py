@@ -91,19 +91,28 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('R', 1)
         self.assertEqual(self.game.evaluate_columns(self.game.aggregate_columns()), 'Red')
 
-    def test_evaluate_diagonals(self):
-        self.game.place_piece('R', 1)
-        self.game.place_piece('B', 1)
-        self.game.place_piece('B', 1)
+    def test_aggregate_diagonals(self):
+        aggregated = self.game.aggregate_diagonals()
+        for agg in aggregated:
+            self.assertEqual(type(agg), list)
+
+    def test_evaluate_diagonals_red_wins(self):
+        self.game.place_piece('B', 3)
+        self.game.place_piece('B', 3)
+        self.game.place_piece('R', 3)
         self.game.place_piece('R', 1)
         self.game.place_piece('B', 2)
         self.game.place_piece('R', 2)
-        self.game.place_piece('B', 7)
-        self.game.place_piece('R', 6)
-        self.game.place_piece('R', 6)
+        self.game.place_piece('B', 4)
+        self.game.place_piece('R', 4)
+        self.game.place_piece('R', 4)
+        aggregated = self.game.aggregate_diagonals()
+        self.assertEqual(self.game.evaluate_diagonals(aggregated), '')
+        self.game.place_piece('R', 4)
         print("\n")
         self.game.render_board()
-        self.game.aggregate_diagonals()
+        self.assertEqual(self.game.evaluate_diagonals(self.game.aggregate_diagonals()), 'Red')
+
 
 
 if __name__ == '__main__':
