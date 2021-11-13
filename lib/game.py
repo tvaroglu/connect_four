@@ -68,13 +68,32 @@ class Game:
         black_wins = '| B | B | B | B |'
         red_wins = '| R | R | R | R |'
         for column in aggregated_columns:
-            column[-1] = f'{column[-1]}|'
+            column[-1] = self.reformat_last_cell(column[-1])
             joined = self.join_row(column)
             if black_wins in joined:
                 winning_color = 'Black'
             elif red_wins in joined:
                 winning_color = 'Red'
         return winning_color
+
+    def aggregate_diagonals(self):
+        # 4
+        up_1 = [self.board[8][0], self.board[6][1], self.board[4][2], self.reformat_last_cell(self.board[2][3])]
+        # 5
+        up_2 = [self.board[10][0], self.board[8][1], self.board[6][2], self.board[4][3], self.reformat_last_cell(self.board[2][4])]
+        # 6
+        up_3 = [self.board[12][0], self.board[10][1], self.board[8][2], self.board[6][3], self.board[4][4], self.reformat_last_cell(self.board[2][5])]
+        # 6
+        up_4 = [self.board[12][1], self.board[10][2], self.board[8][3], self.board[6][4], self.board[4][5], self.board[2][6]]
+        # 5
+        up_5 = [self.board[12][2], self.board[10][3], self.board[8][4], self.board[6][5], self.board[4][6]]
+        # 4
+        up_6 = [self.board[12][3], self.board[10][4], self.board[8][5], self.board[6][6]]
+        print(self.join_row(up_6))
+        print(len(up_6))
+
+    def reformat_last_cell(self, cell):
+        return f'{cell}|'
 
     def join_row(self, row):
         return ''.join(row)

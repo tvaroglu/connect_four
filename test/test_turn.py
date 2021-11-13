@@ -103,6 +103,7 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('R', 6)
         print("\n")
         self.game.render_board()
+        self.game.aggregate_diagonals()
 
 
 if __name__ == '__main__':
