@@ -73,30 +73,28 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('B', 7)
         self.game.place_piece('B', 7)
         aggregated = self.game.aggregate_columns()
-        self.assertEqual(self.game.evaluate_columns(aggregated), '')
+        self.assertEqual(self.game.evaluate_sections('columns', aggregated), '')
         for column in aggregated[0:-2]:
             self.assertEqual(column, self.empty_column)
         self.assertEqual(aggregated[-2], ['|   ', '|   ', '|   ', '|   ', '| R ', '| B |'])
         self.assertEqual(aggregated[-1], ['|   ', '|   ', '|   ', '| B ', '| B ', '| B |'])
         self.game.place_piece('B', 7)
         self.assertEqual(self.game.evaluate_rows(), '')
-        self.assertEqual(self.game.evaluate_columns(self.game.aggregate_columns()), 'Black')
+        self.assertEqual(self.game.evaluate_sections('columns', self.game.aggregate_columns()), 'Black')
 
     def test_evaluate_columns_red_wins(self):
         self.game.place_piece('R', 1)
         self.game.place_piece('R', 1)
         self.game.place_piece('R', 1)
-        self.assertEqual(self.game.evaluate_columns(self.game.aggregate_columns()), '')
+        self.assertEqual(self.game.evaluate_sections('columns', self.game.aggregate_columns()), '')
         self.game.place_piece('B', 7)
         self.game.place_piece('R', 1)
-        self.assertEqual(self.game.evaluate_columns(self.game.aggregate_columns()), 'Red')
+        self.assertEqual(self.game.evaluate_sections('columns', self.game.aggregate_columns()), 'Red')
 
-    def test_aggregate_diagonals(self):
+    def test_evaluate_diagonals_red_wins(self):
         aggregated = self.game.aggregate_diagonals()
         for agg in aggregated:
             self.assertEqual(type(agg), list)
-
-    def test_evaluate_diagonals_red_wins(self):
         self.game.place_piece('B', 3)
         self.game.place_piece('B', 3)
         self.game.place_piece('R', 3)
@@ -107,12 +105,25 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('R', 4)
         self.game.place_piece('R', 4)
         aggregated = self.game.aggregate_diagonals()
-        self.assertEqual(self.game.evaluate_diagonals(aggregated), '')
+        self.assertEqual(self.game.evaluate_sections('diagonals', aggregated), '')
         self.game.place_piece('R', 4)
-        print("\n")
-        self.game.render_board()
-        self.assertEqual(self.game.evaluate_diagonals(self.game.aggregate_diagonals()), 'Red')
+        self.assertEqual(self.game.evaluate_sections('diagonals', self.game.aggregate_diagonals()), 'Red')
 
+    def test_evaluate_diagonals_black_wins(self):
+        self.game.place_piece('R', 5)
+        self.game.place_piece('B', 5)
+        self.game.place_piece('B', 5)
+        self.game.place_piece('B', 7)
+        self.game.place_piece('R', 6)
+        self.game.place_piece('B', 6)
+        self.game.place_piece('B', 4)
+        self.game.place_piece('R', 4)
+        self.game.place_piece('B', 4)
+        self.assertEqual(self.game.evaluate_sections('diagonals', self.game.aggregate_diagonals()), '')
+        self.game.place_piece('B', 4)
+        # print("\n")
+        # self.game.render_board()
+        self.assertEqual(self.game.evaluate_sections('diagonals', self.game.aggregate_diagonals()), 'Black')
 
 
 if __name__ == '__main__':
