@@ -16,6 +16,12 @@ class Game:
     def piece_placed(self):
         return 'Nice move!'
 
+    def draw(self):
+        return 'Uh oh! No more slots open... game over!!'
+
+    def board_full(self):
+        return self.valid_positions[0] not in self.board[2] or self.valid_positions[1] not in self.board[2]
+
     def place_piece(self, color, column_number, row_index=0):
         column_index = int(column_number) - 1
         if row_index > 5 or column_index not in range(0, 7):
