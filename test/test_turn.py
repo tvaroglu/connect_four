@@ -91,7 +91,7 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('R', 1)
         self.assertEqual(self.game.evaluate_columns(self.game.aggregate_columns()), 'Red')
 
-    def test_evaluate_columns_red_wins(self):
+    def test_evaluate_diagonals(self):
         self.game.place_piece('R', 1)
         self.game.place_piece('B', 1)
         self.game.place_piece('B', 1)
