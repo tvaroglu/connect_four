@@ -39,8 +39,22 @@ class TestBoard(unittest.TestCase):
         empty_row = self.board.empty_row()
         self.assertEqual(self.board.join_row(empty_row), '|   |   |   |   |   |   |   |')
 
-    def test_board_setup(self):
-        board = self.board.board_setup()
+    def test_construct_board(self):
+        board = self.board.construct_board()
+        labels = self.board.full_column_label()
+        divider = self.board.row_dividers()
+        empty_row = self.board.empty_row()
+        self.assertEqual(len(board), 14)
+        self.assertEqual(board[0], labels)
+        for index, row in enumerate(board[1:-1]):
+            self.assertEqual(len(row), 7)
+            if index % 2 == 0:
+                self.assertEqual(row, divider)
+            else:
+                self.assertEqual(row, empty_row)
+
+    def test_print_board_setup(self):
+        board = self.board.construct_board(printable=True)
         labels = self.board.full_column_label()
         divider = self.board.full_row_divider()
         empty_row = self.board.join_row(self.board.empty_row())
@@ -50,6 +64,8 @@ class TestBoard(unittest.TestCase):
                 self.assertEqual(row, divider)
             else:
                 self.assertEqual(row, empty_row)
+        # print("\n")
+        # self.board.print_board()
 
 
 if __name__ == '__main__':

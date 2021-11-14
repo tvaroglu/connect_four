@@ -35,18 +35,18 @@ class Board:
     def join_row(self, row):
         return ''.join(row)
 
-    def board_setup(self):
+    def construct_board(self, printable=False):
         board = [self.full_column_label()]
         for row in self.row_range:
-            board.append(self.full_row_divider())
-            board.append(self.join_row(self.empty_row()))
+            if printable:
+                board.append(self.full_row_divider())
+                board.append(self.join_row(self.empty_row()))
+            else:
+                board.append(self.row_dividers())
+                board.append(self.empty_row())
         board.pop()
         return board
 
     def print_board(self):
-        for row in self.board_setup():
+        for row in self.construct_board(printable=True):
             print(row)
-
-
-# b = Board()
-# b.print_board()
