@@ -20,7 +20,7 @@ class Game:
         return 'Uh oh! No more slots open... game over!!'
 
     def board_full(self):
-        return self.valid_positions[0] not in self.board[2] or self.valid_positions[1] not in self.board[2]
+        return self.valid_positions[0] not in self.board[2] and self.valid_positions[1] not in self.board[2]
 
     def place_piece(self, color, column_number, row_index=0):
         column_index = int(column_number) - 1
@@ -28,15 +28,16 @@ class Game:
             return self.invalid_placement()
         elif color not in self.valid_colors:
             return self.invalid_color()
+        elif self.board_full():
+            return self.draw()
         row_placement = self.game_rows[row_index]
         net_placement = self.board[row_placement][column_index]
+        formatted = self.format_cell(color)
         if net_placement == self.valid_positions[0]:
-            self.board[row_placement][column_index] = f'| {color} '
-            return self.piece_placed()
+            self.board[row_placement][column_index] = formatted
         elif net_placement == self.valid_positions[1]:
-            self.board[row_placement][column_index] = f'| {color} |'
-            return self.piece_placed()
-        return self.place_piece(color, column_number, row_index + 1)
+            self.board[row_placement][column_index] = self.reformat_last_cell(formatted)
+        return self.piece_placed() if net_placement in self.valid_positions else self.place_piece(color, column_number, row_index + 1)
 
     def aggregate_columns(self):
         col_1 = []
@@ -82,6 +83,9 @@ class Game:
             elif self.red_wins in joined:
                 winning_color = 'Red'
         return winning_color
+
+    def format_cell(self, color):
+        return f'| {color} '
 
     def reformat_last_cell(self, cell):
         return f'{cell}|'

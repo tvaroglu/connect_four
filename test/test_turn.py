@@ -32,6 +32,11 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('B', 7)
         self.assertEqual(self.second_row[6], '| B |')
 
+    def test_reformat_last_cell(self):
+        formatted = self.game.format_cell('R')
+        self.assertEqual(formatted, '| R ')
+        self.assertEqual(self.game.reformat_last_cell(formatted), '| R |')
+
     def test_place_invalid_color(self):
         self.assertEqual(self.game.invalid_color(), 'Sorry! Invalid color, please try again.')
         self.assertEqual(self.game.place_piece('G', 1), self.game.invalid_color())
@@ -121,6 +126,8 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('R', 4)
         self.assertEqual(self.game.evaluate_sections('diagonals', self.game.aggregate_diagonals()), '')
         self.game.place_piece('R', 4)
+        # print("\n")
+        # self.game.render_board()
         self.assertEqual(self.game.evaluate_sections('diagonals', self.game.aggregate_diagonals()), 'Red')
 
     def test_draw(self):
@@ -133,10 +140,8 @@ class TestGame(unittest.TestCase):
             self.game.place_piece('B', (i + 1))
             self.game.place_piece('R', (i + 1))
             self.game.place_piece('B', (i + 1))
-        print("\n")
-        self.game.render_board()
         self.assertEqual(self.game.board_full(), True)
-
+        self.assertEqual(self.game.place_piece('R', 1), self.game.draw())
 
 
 if __name__ == '__main__':
