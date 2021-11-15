@@ -1,11 +1,14 @@
 import unittest
 from lib.board import Board
+from lib.player import Player
 from lib.game import Game
 
 class TestGame(unittest.TestCase):
     def setUp(self):
         self.board = Board()
-        self.game = Game(self.board.construct_board())
+        self.player_1 = Player('John', 'R')
+        self.player_2 = Player('Jane', 'B')
+        self.game = Game(self.board.construct_board(), self.player_1, self.player_2)
         self.first_row = self.game.board[self.game.game_rows[0]]
         self.second_row = self.game.board[self.game.game_rows[1]]
         self.empty_row = ['|   ', '|   ', '|   ', '|   ', '|   ', '|   ', '|   |']
@@ -45,8 +48,6 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('R', 1)
         self.game.place_piece('B', 1)
         self.game.place_piece('R', 1)
-        self.game.place_piece('B', 7)
-        self.game.place_piece('R', 7)
         self.game.place_piece('B', 1)
         self.game.place_piece('R', 1)
         self.game.place_piece('B', 1)
@@ -58,7 +59,6 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('B', 2)
         self.game.place_piece('B', 3)
         self.assertEqual(self.game.evaluate_sections('rows', self.game.board), '')
-        self.game.place_piece('R', 5)
         self.game.place_piece('B', 4)
         self.assertEqual(self.game.evaluate_sections('rows', self.game.board), 'Black')
 
@@ -67,7 +67,6 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('R', 6)
         self.game.place_piece('R', 5)
         self.assertEqual(self.game.evaluate_sections('rows', self.game.board), '')
-        self.game.place_piece('B', 3)
         self.game.place_piece('R', 4)
         self.assertEqual(self.game.evaluate_sections('rows', self.game.board), 'Red')
 
@@ -92,7 +91,6 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('R', 1)
         self.game.place_piece('R', 1)
         self.assertEqual(self.game.evaluate_sections('columns', self.game.aggregate_columns()), '')
-        self.game.place_piece('B', 7)
         self.game.place_piece('R', 1)
         self.assertEqual(self.game.evaluate_sections('columns', self.game.aggregate_columns()), 'Red')
 

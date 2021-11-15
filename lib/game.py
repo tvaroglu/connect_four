@@ -1,6 +1,8 @@
 class Game:
-    def __init__(self, board):
+    def __init__(self, board, player_1, player_2):
         self.board = board
+        self.player_1 = player_1
+        self.player_2 = player_2
         self.game_rows = (12, 10, 8, 6, 4, 2)
         self.valid_positions = ('|   ', '|   |')
         self.valid_colors = ('B', 'R')
