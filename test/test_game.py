@@ -143,6 +143,17 @@ class TestGame(unittest.TestCase):
         self.assertEqual(self.game.board_full(), True)
         self.assertEqual(self.game.place_piece('R', 1), self.game.draw())
 
+    def test_game_over(self):
+        self.game.place_piece('B', 1)
+        self.game.place_piece('B', 2)
+        self.game.place_piece('B', 3)
+        self.assertEqual(self.game.winner, '')
+        self.assertEqual(self.game.set_winner(), '')
+        self.assertEqual(self.game.game_over(), False)
+        self.game.place_piece('B', 4)
+        self.assertEqual(self.game.set_winner(), 'Black')
+        self.assertEqual(self.game.winner, 'Black')
+        self.assertEqual(self.game.game_over(), True)
 
 if __name__ == '__main__':
     unittest.main()

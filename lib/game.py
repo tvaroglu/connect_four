@@ -8,6 +8,7 @@ class Game:
         self.valid_colors = ('B', 'R')
         self.black_wins = '| B | B | B | B |'
         self.red_wins = '| R | R | R | R |'
+        self.winner = ''
 
     def invalid_placement(self):
         return "Sorry! Can't place a piece there, please try another move."
@@ -94,6 +95,21 @@ class Game:
 
     def join_row(self, row):
         return ''.join(row)
+
+    def set_winner(self):
+        helper_dict = {
+            'rows': self.evaluate_sections('rows', self.board),
+            'columns': self.evaluate_sections('columns', self.aggregate_columns()),
+            'diagonals': self.evaluate_sections('diagonals', self.aggregate_diagonals())
+        }
+        if 'Black' in helper_dict.values():
+            self.winner = 'Black'
+        elif 'Red' in helper_dict.values():
+            self.winner = 'Red'
+        return self.winner
+
+    def game_over(self):
+        return self.winner != '' or self.board_full()
 
     def render_board(self):
         print(self.board[0])
