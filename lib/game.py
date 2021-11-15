@@ -8,6 +8,7 @@ class Game:
         self.valid_colors = ('B', 'R')
         self.black_wins = '| B | B | B | B |'
         self.red_wins = '| R | R | R | R |'
+        self.winner = ''
 
     def invalid_placement(self):
         return "Sorry! Can't place a piece there, please try another move."
@@ -25,8 +26,11 @@ class Game:
         return self.valid_positions[0] not in self.board[2] and self.valid_positions[1] not in self.board[2]
 
     def place_piece(self, color, column_number, row_index=0):
-        column_index = int(column_number) - 1
-        if row_index > 5 or column_index not in range(0, 7):
+        try:
+            column_index = int(column_number) - 1
+        except ValueError:
+            return self.invalid_placement()
+        if row_index > 5 or column_index not in range(0, len(self.board[2])):
             return self.invalid_placement()
         elif color not in self.valid_colors:
             return self.invalid_color()
@@ -34,11 +38,10 @@ class Game:
             return self.draw()
         row_placement = self.game_rows[row_index]
         net_placement = self.board[row_placement][column_index]
-        formatted = self.format_cell(color)
         if net_placement == self.valid_positions[0]:
-            self.board[row_placement][column_index] = formatted
+            self.board[row_placement][column_index] = self.format_cell(color)
         elif net_placement == self.valid_positions[1]:
-            self.board[row_placement][column_index] = self.reformat_last_cell(formatted)
+            self.board[row_placement][column_index] = self.reformat_last_cell(self.format_cell(color))
         return self.piece_placed() if net_placement in self.valid_positions else self.place_piece(color, column_number, row_index + 1)
 
     def aggregate_columns(self):
@@ -94,6 +97,21 @@ class Game:
 
     def join_row(self, row):
         return ''.join(row)
+
+    def set_winner(self):
+        helper_dict = {
+            'rows': self.evaluate_sections('rows', self.board),
+            'columns': self.evaluate_sections('columns', self.aggregate_columns()),
+            'diagonals': self.evaluate_sections('diagonals', self.aggregate_diagonals())
+        }
+        if 'Black' in helper_dict.values():
+            self.winner = 'Black'
+        elif 'Red' in helper_dict.values():
+            self.winner = 'Red'
+
+    def game_over(self):
+        self.set_winner()
+        return self.winner != '' or self.board_full()
 
     def render_board(self):
         print(self.board[0])

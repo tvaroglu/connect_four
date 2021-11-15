@@ -14,11 +14,13 @@ class TestGame(unittest.TestCase):
         self.empty_row = ['|   ', '|   ', '|   ', '|   ', '|   ', '|   ', '|   |']
         self.empty_column = ['|   ', '|   ', '|   ', '|   ', '|   ', '|   |']
 
+    def test_join_row(self):
+        self.assertEqual(self.game.join_row(self.empty_row), '|   |   |   |   |   |   |   |')
+
     def test_game_rows(self):
         for index in self.game.game_rows:
             self.assertEqual(self.game.board[index], self.empty_row)
             self.assertEqual(len(self.game.board[index]), 7)
-        self.assertEqual(self.game.join_row(self.empty_row), ''.join(self.empty_row))
 
     def test_piece_placed(self):
         self.assertEqual(self.game.piece_placed(), 'Nice move!')
@@ -53,6 +55,8 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('B', 1)
         self.assertEqual(self.game.invalid_placement(), "Sorry! Can't place a piece there, please try another move.")
         self.assertEqual(self.game.place_piece('B', 1), self.game.invalid_placement())
+        self.assertEqual(self.game.place_piece('B', 8), self.game.invalid_placement())
+        self.assertEqual(self.game.place_piece('B', ''), self.game.invalid_placement())
 
     def test_evaluate_rows_black_wins(self):
         self.game.place_piece('B', 1)
@@ -141,6 +145,15 @@ class TestGame(unittest.TestCase):
         self.assertEqual(self.game.board_full(), True)
         self.assertEqual(self.game.place_piece('R', 1), self.game.draw())
 
+    def test_game_over(self):
+        self.game.place_piece('B', 1)
+        self.game.place_piece('B', 2)
+        self.game.place_piece('B', 3)
+        self.assertEqual(self.game.game_over(), False)
+        self.assertEqual(self.game.winner, '')
+        self.game.place_piece('B', 4)
+        self.assertEqual(self.game.game_over(), True)
+        self.assertEqual(self.game.winner, 'Black')
 
 if __name__ == '__main__':
     unittest.main()

@@ -10,7 +10,7 @@ class Board:
         return output_list
 
     def full_column_label(self):
-        joined = self.join_row(self.column_labels())
+        joined = ''.join(self.column_labels())
         return f' {joined}'
 
     def row_dividers(self):
@@ -21,9 +21,6 @@ class Board:
         output_list[-1] = section + '+'
         return output_list
 
-    def full_row_divider(self):
-        return self.join_row(self.row_dividers())
-
     def empty_row(self):
         output_list = []
         section = '|   '
@@ -32,21 +29,10 @@ class Board:
         output_list[-1] = section + '|'
         return output_list
 
-    def join_row(self, row):
-        return ''.join(row)
-
-    def construct_board(self, printable=False):
+    def construct_board(self):
         board = [self.full_column_label()]
         for row in self.row_range:
-            if printable:
-                board.append(self.full_row_divider())
-                board.append(self.join_row(self.empty_row()))
-            else:
-                board.append(self.row_dividers())
-                board.append(self.empty_row())
+            board.append(self.row_dividers())
+            board.append(self.empty_row())
         board.pop()
         return board
-
-    def print_board(self):
-        for row in self.construct_board(printable=True):
-            print(row)

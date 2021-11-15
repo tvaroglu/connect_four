@@ -5,6 +5,3 @@ class Player:
 
     def full_color(self):
         return 'Red' if self.color == 'R' else 'Black'
-
-    def greet(self):
-        return f"Welcome, {self.name}! Your color is '{self.full_color()}'"
