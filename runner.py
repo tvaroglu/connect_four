@@ -3,6 +3,7 @@ from lib.player import Player
 from lib.game import Game
 from lib.prompt import Prompt
 
+
 prompt = Prompt()
 print(prompt.welcome())
 
@@ -13,3 +14,7 @@ print(prompt.greet_player(player_1.name, player_1.full_color()))
 name = input(prompt.request_name())
 player_2 = Player(name, 'B')
 print(prompt.greet_player(player_2.name, player_2.full_color()))
+
+board = Board()
+game = Game(board.construct_board(), player_1, player_2)
+game.render_board()

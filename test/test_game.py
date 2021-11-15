@@ -14,11 +14,13 @@ class TestGame(unittest.TestCase):
         self.empty_row = ['|   ', '|   ', '|   ', '|   ', '|   ', '|   ', '|   |']
         self.empty_column = ['|   ', '|   ', '|   ', '|   ', '|   ', '|   |']
 
+    def test_join_row(self):
+        self.assertEqual(self.game.join_row(self.empty_row), '|   |   |   |   |   |   |   |')
+
     def test_game_rows(self):
         for index in self.game.game_rows:
             self.assertEqual(self.game.board[index], self.empty_row)
             self.assertEqual(len(self.game.board[index]), 7)
-        self.assertEqual(self.game.join_row(self.empty_row), ''.join(self.empty_row))
 
     def test_piece_placed(self):
         self.assertEqual(self.game.piece_placed(), 'Nice move!')

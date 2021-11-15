@@ -26,7 +26,7 @@ class Game:
 
     def place_piece(self, color, column_number, row_index=0):
         column_index = int(column_number) - 1
-        if row_index > 5 or column_index not in range(0, 7):
+        if row_index > 5 or column_index not in range(0, len(self.board[0])):
             return self.invalid_placement()
         elif color not in self.valid_colors:
             return self.invalid_color()
