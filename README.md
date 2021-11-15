@@ -32,8 +32,8 @@ Feeling nostalgic? How about a quick game of **Connect Four** for a little break
 
 #### Packages
 <p>
+  <img src="https://img.shields.io/badge/virtualenv-1572B6.svg?&style=flaste&logo=python&logoColor=white" />  
   <img src="https://img.shields.io/badge/unittest-1572B6.svg?&style=flaste&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/virtualenv-b81818.svg?&style=flaste&logo=rubygems&logoColor=white" />  
 </p>
 
 #### Development Principles
