@@ -17,5 +17,14 @@ class Prompt:
     def line_break(self):
         return "\n"
 
+    def start_game(self):
+        return "Let's play!"
+
+    def new_game(self):
+        return "Would you like to play again? (y/n)\n > "
+
+    def end_game(self):
+        return "Game exiting...\n Goodbye!"
+
     def announce_victor(self, winning_color):
         return f'{winning_color} wins!'

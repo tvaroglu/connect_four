@@ -38,11 +38,10 @@ class Game:
             return self.draw()
         row_placement = self.game_rows[row_index]
         net_placement = self.board[row_placement][column_index]
-        formatted = self.format_cell(color)
         if net_placement == self.valid_positions[0]:
-            self.board[row_placement][column_index] = formatted
+            self.board[row_placement][column_index] = self.format_cell(color)
         elif net_placement == self.valid_positions[1]:
-            self.board[row_placement][column_index] = self.reformat_last_cell(formatted)
+            self.board[row_placement][column_index] = self.reformat_last_cell(self.format_cell(color))
         return self.piece_placed() if net_placement in self.valid_positions else self.place_piece(color, column_number, row_index + 1)
 
     def aggregate_columns(self):

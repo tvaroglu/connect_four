@@ -25,6 +25,18 @@ class TestPrompt(unittest.TestCase):
     def test_line_break(self):
         self.assertEqual(self.prompt.line_break(), "\n")
 
+    def test_start_game(self):
+        self.assertEqual(self.prompt.start_game(), "Let's play!")
+
+    def test_new_game(self):
+        self.assertEqual(self.prompt.new_game(), "Would you like to play again? (y/n)\n > ")
+
+    def test_end_game(self):
+        self.assertEqual(self.prompt.end_game(), "Game exiting...\n Goodbye!")
+
+    def test_announce_victor(self):
+        self.assertEqual(self.prompt.announce_victor(self.player_1.full_color()), f"{self.player_1.full_color()} wins!")
+
 
 if __name__ == '__main__':
     unittest.main()
