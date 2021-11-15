@@ -13,6 +13,7 @@
 - [Tools Utilized](#language)
 - [Contributors](#contributors)
 - [Project Configurations](#setup)
+- [Link to Replit](#deployment)
 
 
 ------
@@ -58,8 +59,12 @@ This project requires Python 3.
     * `$ python3 -m virtualenv venv`
     * `$ source venv/bin/activate`
 * Run the test suite with `(venv) python -m unittest`
-* Run the game with `(venv) python runner.py`
+* Run the game with `(venv) python main.py`
 
+## <ins>Deployment</ins>
+
+A fully functional version is currently hosted on Replit.com!
+  * Check it out [here](https://replit.com/@tvaroglu/connectfour#main.py)
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
