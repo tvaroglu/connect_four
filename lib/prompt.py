@@ -1,6 +1,9 @@
 class Prompt:
-    def __init__(self, input):
-        self.input = input
+    def __init__(self):
+        pass
 
-    def say_hello(self):
-        return f'Hello {self.input}'
+    def welcome(self):
+        return 'Welcome to ConnectFour!'
+
+    def request_name(self):
+        return "What is your name?\n > "
