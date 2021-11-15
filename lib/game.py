@@ -26,8 +26,11 @@ class Game:
         return self.valid_positions[0] not in self.board[2] and self.valid_positions[1] not in self.board[2]
 
     def place_piece(self, color, column_number, row_index=0):
-        column_index = int(column_number) - 1
-        if row_index > 5 or column_index not in range(0, len(self.board[0])):
+        try:
+            column_index = int(column_number) - 1
+        except ValueError:
+            return self.invalid_placement()
+        if row_index > 5 or column_index not in range(0, len(self.board[2])):
             return self.invalid_placement()
         elif color not in self.valid_colors:
             return self.invalid_color()
@@ -106,9 +109,9 @@ class Game:
             self.winner = 'Black'
         elif 'Red' in helper_dict.values():
             self.winner = 'Red'
-        return self.winner
 
     def game_over(self):
+        self.set_winner()
         return self.winner != '' or self.board_full()
 
     def render_board(self):

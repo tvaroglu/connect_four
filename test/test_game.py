@@ -55,6 +55,8 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('B', 1)
         self.assertEqual(self.game.invalid_placement(), "Sorry! Can't place a piece there, please try another move.")
         self.assertEqual(self.game.place_piece('B', 1), self.game.invalid_placement())
+        self.assertEqual(self.game.place_piece('B', 8), self.game.invalid_placement())
+        self.assertEqual(self.game.place_piece('B', ''), self.game.invalid_placement())
 
     def test_evaluate_rows_black_wins(self):
         self.game.place_piece('B', 1)
@@ -147,13 +149,11 @@ class TestGame(unittest.TestCase):
         self.game.place_piece('B', 1)
         self.game.place_piece('B', 2)
         self.game.place_piece('B', 3)
-        self.assertEqual(self.game.winner, '')
-        self.assertEqual(self.game.set_winner(), '')
         self.assertEqual(self.game.game_over(), False)
+        self.assertEqual(self.game.winner, '')
         self.game.place_piece('B', 4)
-        self.assertEqual(self.game.set_winner(), 'Black')
-        self.assertEqual(self.game.winner, 'Black')
         self.assertEqual(self.game.game_over(), True)
+        self.assertEqual(self.game.winner, 'Black')
 
 if __name__ == '__main__':
     unittest.main()
