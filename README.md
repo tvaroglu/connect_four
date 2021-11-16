@@ -64,7 +64,7 @@ This project requires Python 3.
 ## <ins>Deployment</ins>
 
 A fully functional version is currently hosted on Replit.com!
-  * Check it out [here](https://replit.com/@tvaroglu/connectfour#main.py)
+  * Check it out [here](https://replit.com/@tvaroglu/connectfour#welcome.txt)
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
