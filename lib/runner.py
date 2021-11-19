@@ -5,27 +5,28 @@ from lib.prompt import Prompt
 
 def run_game(new_game='y'):
     while new_game == 'y':
+        board = Board()
         prompt = Prompt()
         print(prompt.welcome())
         print(prompt.line_break())
 
         name = input(prompt.request_name())
-        player_1 = Player(name, 'R')
+        player_1 = Player(name, board.red_piece)
         print(prompt.greet_player(player_1.name, player_1.full_color()))
         print(prompt.line_break())
 
         name = input(prompt.request_name())
-        player_2 = Player(name, 'B')
+        player_2 = Player(name, board.black_piece)
         print(prompt.greet_player(player_2.name, player_2.full_color()))
         print(prompt.line_break())
 
-        board = Board()
         game = Game(board.construct_board(), player_1, player_2)
         print(prompt.start_game())
 
         while not game.game_over():
             print(prompt.line_break())
             game.render_board()
+            print(prompt.line_break())
             turn = input(prompt.request_placement(player_1.name))
             result = game.place_piece(player_1.color, turn)
             while result != game.piece_placed():
@@ -38,6 +39,7 @@ def run_game(new_game='y'):
             game.render_board()
 
             if not game.game_over():
+                print(prompt.line_break())
                 turn = input(prompt.request_placement(player_2.name))
                 result = game.place_piece(player_2.color, turn)
                 while result != game.piece_placed():
@@ -49,6 +51,8 @@ def run_game(new_game='y'):
                 game.game_over()
 
         print(prompt.line_break())
+        game.render_board()
+        print(prompt.line_break())
         if game.board_full():
             print(game.draw())
         else:
@@ -56,9 +60,9 @@ def run_game(new_game='y'):
 
         request = input(prompt.new_game())
         if len(request) == 0:
-            new_game == 'y'
+            new_game = prompt.default_request
         else:
-            new_game = request.lower()[0]
+            new_game = prompt.sanitize_request(request)
 
     print(prompt.line_break())
     print(prompt.end_game())

@@ -5,8 +5,10 @@ from lib.player import Player
 class TestPrompt(unittest.TestCase):
     def setUp(self):
         self.prompt = Prompt()
-        self.player_1 = Player('John', 'R')
-        self.player_2 = Player('Jane', 'B')
+        self.red_piece = '🟥'
+        self.black_piece = '⬛️'
+        self.player_1 = Player('John', self.red_piece)
+        self.player_2 = Player('Jane', self.black_piece)
 
     def test_welcome(self):
         self.assertEqual(self.prompt.welcome(), 'Welcome to ConnectFour!')
@@ -35,7 +37,12 @@ class TestPrompt(unittest.TestCase):
         self.assertEqual(self.prompt.end_game(), "Game exiting...\n Goodbye!")
 
     def test_announce_victor(self):
-        self.assertEqual(self.prompt.announce_victor(self.player_1.full_color()), f"{self.player_1.full_color()} wins!")
+        self.assertEqual(self.prompt.announce_victor(self.player_1.full_color()), f"{self.player_1.full_color()} wins!!")
+
+    def test_sanitize_requeset(self):
+        user_input = 'NO'
+        self.assertEqual(self.prompt.sanitize_request(user_input), 'n')
+        self.assertEqual(self.prompt.default_request, 'y')
 
 
 if __name__ == '__main__':

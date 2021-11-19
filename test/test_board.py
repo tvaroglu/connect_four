@@ -10,26 +10,26 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(len(labels), 7)
         counter = 1
         for l in labels:
-            self.assertEqual(l, f' {str(counter)}  ')
+            self.assertEqual(l, f' {str(counter)}.  ')
             counter += 1
 
     def test_full_column_label(self):
         full_label = self.board.full_column_label()
-        self.assertEqual(full_label, '  1   2   3   4   5   6   7  ')
+        self.assertEqual(full_label, '  1.   2.   3.   4.   5.   6.   7.  ')
 
     def test_row_dividers(self):
         dividers = self.board.row_dividers()
         self.assertEqual(len(dividers), 7)
         for d in dividers[0:5]:
-            self.assertEqual(d, '+---')
-        self.assertEqual(dividers[6], '+---+')
+            self.assertEqual(d, '+----')
+        self.assertEqual(dividers[6], '+----+')
 
     def test_empty_row(self):
         empty_row = self.board.empty_row()
         self.assertEqual(len(empty_row), 7)
         for cell in empty_row[0:5]:
-            self.assertEqual(cell, '|   ')
-        self.assertEqual(empty_row[6], '|   |')
+            self.assertEqual(cell, '|    ')
+        self.assertEqual(empty_row[6], '|    |')
 
     def test_construct_board(self):
         board = self.board.construct_board()
