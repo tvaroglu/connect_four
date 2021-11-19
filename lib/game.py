@@ -4,17 +4,13 @@ class Game:
         self.player_1 = player_1
         self.player_2 = player_2
         self.game_rows = (12, 10, 8, 6, 4, 2)
-        self.valid_positions = ('|   ', '|   |')
-        self.valid_colors = ('B', 'R')
-        self.black_wins = '| B | B | B | B |'
-        self.red_wins = '| R | R | R | R |'
+        self.valid_positions = ('|    ', '|    |')
+        self.black_wins = '| ⬛️ | ⬛️ | ⬛️ | ⬛️ |'
+        self.red_wins = '| 🟥 | 🟥 | 🟥 | 🟥 |'
         self.winner = ''
 
     def invalid_placement(self):
         return "Sorry! Can't place a piece there, please try another move."
-
-    def invalid_color(self):
-        return 'Sorry! Invalid color, please try again.'
 
     def piece_placed(self):
         return 'Nice move!'
@@ -32,8 +28,6 @@ class Game:
             return self.invalid_placement()
         if row_index > 5 or column_index not in range(0, len(self.board[2])):
             return self.invalid_placement()
-        elif color not in self.valid_colors:
-            return self.invalid_color()
         elif self.board_full():
             return self.draw()
         row_placement = self.game_rows[row_index]

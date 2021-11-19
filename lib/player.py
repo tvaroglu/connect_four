@@ -4,4 +4,4 @@ class Player:
         self.color = color
 
     def full_color(self):
-        return 'Red' if self.color == 'R' else 'Black'
+        return 'Red' if self.color == '🟥' else 'Black'

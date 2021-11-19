@@ -1,6 +1,6 @@
 class Prompt:
     def __init__(self):
-        pass
+        self.default_request = 'y'
 
     def welcome(self):
         return 'Welcome to ConnectFour!'
@@ -27,4 +27,7 @@ class Prompt:
         return "Game exiting...\n Goodbye!"
 
     def announce_victor(self, winning_color):
-        return f'{winning_color} wins!'
+        return f'{winning_color} wins!!'
+
+    def sanitize_request(self, user_input):
+        return str(user_input.lower()[0])
