@@ -21,10 +21,8 @@
 ### <ins>Overview</ins>
 <img src="https://user-images.githubusercontent.com/58891447/141860830-780cd2a5-0c87-434d-893c-c44bc3673cbd.jpeg" width=50%/>  
 
-</br>
-
 Feeling nostalgic? How about a quick game of **Connect Four** for a little break in your day!
-
+</br>
 
 #### Language
 <p>
@@ -58,8 +56,8 @@ This project requires Python 3.
 * Set up and activate your virtual environment:
     * `$ python3 -m virtualenv venv`
     * `$ source venv/bin/activate`
-* Run the test suite with `(venv) python -m unittest`
-* Run the game with `(venv) python main.py`
+* Run the test suite with `(venv) $ python -m unittest`
+* Run the game with `(venv) $ python main.py`
 
 ## <ins>Deployment</ins>
 
