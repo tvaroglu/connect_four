@@ -56,7 +56,7 @@ This project requires Python 3.
 * Set up and activate your virtual environment:
     * `$ python3 -m virtualenv venv`
     * `$ source venv/bin/activate`
-* Run the test suite with `(venv) $ python -m unittest`
+* Run the test suite with `(venv) $ python -m unittest -v`
 * Run the game with `(venv) $ python main.py`
 
 ## <ins>Deployment</ins>
