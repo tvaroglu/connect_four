@@ -47,13 +47,19 @@ def run_game(new_game='y'):
 
             if not game.game_over():
                 print(prompt.line_break())
-                turn = input(prompt.request_placement(player_2.name))
-                result = game.place_piece(player_2.color, turn)
-                while result != game.piece_placed():
-                    print(result)
-                    print(prompt.line_break())
+                if game_mode == '2':
                     turn = input(prompt.request_placement(player_2.name))
                     result = game.place_piece(player_2.color, turn)
+                else:
+                    result = game.place_piece(player_2.color, game.skynet_turn(turn))
+                while result != game.piece_placed():
+                    if game_mode == '2':
+                        print(result)
+                        print(prompt.line_break())
+                        turn = input(prompt.request_placement(player_2.name))
+                        result = game.place_piece(player_2.color, turn)
+                    else:
+                        result = game.place_piece(player_2.color, game.skynet_turn(turn))
                 print(result)
                 game.game_over()
 
