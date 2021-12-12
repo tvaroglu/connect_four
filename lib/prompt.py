@@ -31,3 +31,11 @@ class Prompt:
 
     def sanitize_request(self, user_input):
         return str(user_input.lower()[0])
+
+    def request_game_mode(self):
+        return "Please select game mode\n((1) vs (2) player):\n > "
+
+    def game_mode(self, selection='1'):
+        if str(selection) != '2':
+            selection = '1'
+        return f'Entering {selection}-player game mode'

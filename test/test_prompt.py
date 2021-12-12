@@ -39,11 +39,20 @@ class TestPrompt(unittest.TestCase):
     def test_announce_victor(self):
         self.assertEqual(self.prompt.announce_victor(self.player_1.full_color()), f"{self.player_1.full_color()} wins!!")
 
-    def test_sanitize_requeset(self):
+    def test_sanitize_request(self):
         user_input = 'NO'
         self.assertEqual(self.prompt.sanitize_request(user_input), 'n')
         self.assertEqual(self.prompt.default_request, 'y')
 
+    def test_request_game_mode(self):
+        self.assertEqual(self.prompt.request_game_mode(), "Please select game mode\n((1) vs (2) player):\n > ")
+
+    def test_game_mode(self):
+        self.assertEqual(self.prompt.game_mode(), f'Entering 1-player game mode')
+        self.assertEqual(self.prompt.game_mode(2), f'Entering 2-player game mode')
+        self.assertEqual(self.prompt.game_mode(1), f'Entering 1-player game mode')
+        self.assertEqual(self.prompt.game_mode('dfsasfsf'), f'Entering 1-player game mode')
+
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=2)

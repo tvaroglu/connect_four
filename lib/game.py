@@ -1,3 +1,5 @@
+import random
+
 class Game:
     def __init__(self, board, player_1, player_2):
         self.board = board
@@ -111,3 +113,7 @@ class Game:
         print(self.board[0])
         for row in self.board[1:len(self.board)]:
             print(self.join_row(row))
+
+    def skynet_turn(self, player_input):
+        selection = random.choice([(int(player_input) - 1), int(player_input), (int(player_input) + 1)])
+        return selection

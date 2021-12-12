@@ -10,12 +10,19 @@ def run_game(new_game='y'):
         print(prompt.welcome())
         print(prompt.line_break())
 
+        game_mode = input(prompt.request_game_mode())
+        print(prompt.game_mode(game_mode))
+        print(prompt.line_break())
+
         name = input(prompt.request_name())
         player_1 = Player(name, board.red_piece)
         print(prompt.greet_player(player_1.name, player_1.full_color()))
         print(prompt.line_break())
 
-        name = input(prompt.request_name())
+        if game_mode == '2':
+            name = input(prompt.request_name())
+        else:
+            name = player_1.default_name
         player_2 = Player(name, board.black_piece)
         print(prompt.greet_player(player_2.name, player_2.full_color()))
         print(prompt.line_break())
@@ -40,13 +47,19 @@ def run_game(new_game='y'):
 
             if not game.game_over():
                 print(prompt.line_break())
-                turn = input(prompt.request_placement(player_2.name))
-                result = game.place_piece(player_2.color, turn)
-                while result != game.piece_placed():
-                    print(result)
-                    print(prompt.line_break())
+                if game_mode == '2':
                     turn = input(prompt.request_placement(player_2.name))
                     result = game.place_piece(player_2.color, turn)
+                else:
+                    result = game.place_piece(player_2.color, game.skynet_turn(turn))
+                while result != game.piece_placed():
+                    if game_mode == '2':
+                        print(result)
+                        print(prompt.line_break())
+                        turn = input(prompt.request_placement(player_2.name))
+                        result = game.place_piece(player_2.color, turn)
+                    else:
+                        result = game.place_piece(player_2.color, game.skynet_turn(turn))
                 print(result)
                 game.game_over()
 
