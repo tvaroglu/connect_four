@@ -17,8 +17,8 @@ class TestPrompt(unittest.TestCase):
         self.assertEqual(self.prompt.request_name(), "What is your name?\n > ")
 
     def test_greet_player(self):
-        self.assertEqual(self.prompt.greet_player(self.player_1.name, self.player_1.full_color()), f"Welcome, {self.player_1.name}! Your color is '{self.player_1.full_color()}'")
-        self.assertEqual(self.prompt.greet_player(self.player_2.name, self.player_2.full_color()), f"Welcome, {self.player_2.name}! Your color is '{self.player_2.full_color()}'")
+        self.assertEqual(self.prompt.greet_player(self.player_1.name, self.player_1.full_color()), f"Welcome, {self.player_1.name}! Your color is '{self.player_1.full_color()}'.\n You can (q)uit any time you'd like.")
+        self.assertEqual(self.prompt.greet_player(self.player_2.name, self.player_2.full_color()), f"Welcome, {self.player_2.name}! Your color is '{self.player_2.full_color()}'.\n You can (q)uit any time you'd like.")
 
     def test_request_placement(self):
         self.assertEqual(self.prompt.request_placement(self.player_1.name), f"Your turn, {self.player_1.name}. Please enter a number between 1 and 7 to place a piece into the board:\n > ")

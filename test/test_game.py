@@ -62,6 +62,9 @@ class TestGame(unittest.TestCase):
         self.game.place_piece(self.black_piece, 2)
         self.game.place_piece(self.black_piece, 3)
         self.assertEqual(self.game.evaluate_sections('rows', self.game.board), '')
+        self.assertEqual(self.game.checkmate()['rows'], 'Black')
+        self.assertEqual(self.game.checkmate()['columns'], '')
+        self.assertEqual(self.game.checkmate()['diagonals'], '')
         self.game.place_piece(self.black_piece, 4)
         self.assertEqual(self.game.evaluate_sections('rows', self.game.board), 'Black')
 
@@ -70,6 +73,9 @@ class TestGame(unittest.TestCase):
         self.game.place_piece(self.red_piece, 6)
         self.game.place_piece(self.red_piece, 5)
         self.assertEqual(self.game.evaluate_sections('rows', self.game.board), '')
+        self.assertEqual(self.game.checkmate()['rows'], 'Red')
+        self.assertEqual(self.game.checkmate()['columns'], '')
+        self.assertEqual(self.game.checkmate()['diagonals'], '')
         self.game.place_piece(self.red_piece, 4)
         self.assertEqual(self.game.evaluate_sections('rows', self.game.board), 'Red')
 
@@ -81,6 +87,9 @@ class TestGame(unittest.TestCase):
         self.game.place_piece(self.black_piece, 7)
         aggregated = self.game.aggregate_columns()
         self.assertEqual(self.game.evaluate_sections('columns', aggregated), '')
+        self.assertEqual(self.game.checkmate()['rows'], '')
+        self.assertEqual(self.game.checkmate()['columns'], 'Black')
+        self.assertEqual(self.game.checkmate()['diagonals'], '')
         for column in aggregated[0:-2]:
             self.assertEqual(column, self.empty_column)
         self.assertEqual(aggregated[-2], ['|    ', '|    ', '|    ', '|    ', '| 🟥 ', '| ⬛️ |'])
@@ -94,6 +103,9 @@ class TestGame(unittest.TestCase):
         self.game.place_piece(self.red_piece, 1)
         self.game.place_piece(self.red_piece, 1)
         self.assertEqual(self.game.evaluate_sections('columns', self.game.aggregate_columns()), '')
+        self.assertEqual(self.game.checkmate()['rows'], '')
+        self.assertEqual(self.game.checkmate()['columns'], 'Red')
+        self.assertEqual(self.game.checkmate()['diagonals'], '')
         self.game.place_piece(self.red_piece, 1)
         self.assertEqual(self.game.evaluate_sections('columns', self.game.aggregate_columns()), 'Red')
 
@@ -112,6 +124,9 @@ class TestGame(unittest.TestCase):
         self.game.place_piece(self.black_piece, 4)
         aggregated = self.game.aggregate_diagonals()
         self.assertEqual(self.game.evaluate_sections('diagonals', aggregated), '')
+        self.assertEqual(self.game.checkmate()['rows'], '')
+        self.assertEqual(self.game.checkmate()['columns'], '')
+        self.assertEqual(self.game.checkmate()['diagonals'], 'Black')
         self.game.place_piece(self.black_piece, 4)
         self.assertEqual(self.game.evaluate_sections('diagonals', self.game.aggregate_diagonals()), 'Black')
 
@@ -126,9 +141,12 @@ class TestGame(unittest.TestCase):
         self.game.place_piece(self.red_piece, 4)
         self.game.place_piece(self.red_piece, 4)
         self.assertEqual(self.game.evaluate_sections('diagonals', self.game.aggregate_diagonals()), '')
-        self.game.place_piece(self.red_piece, 4)
+        self.assertEqual(self.game.checkmate()['rows'], 'Black')
+        self.assertEqual(self.game.checkmate()['columns'], '')
+        self.assertEqual(self.game.checkmate()['diagonals'], 'Red')
         # print("\n")
         # self.game.render_board()
+        self.game.place_piece(self.red_piece, 4)
         self.assertEqual(self.game.evaluate_sections('diagonals', self.game.aggregate_diagonals()), 'Red')
 
     def test_draw(self):
@@ -143,6 +161,10 @@ class TestGame(unittest.TestCase):
             self.game.place_piece(self.black_piece, (i + 1))
         self.assertEqual(self.game.board_full(), True)
         self.assertEqual(self.game.place_piece(self.red_piece, 1), self.game.draw())
+
+    def test_forfeit(self):
+        self.assertEqual(self.game.forfeit(), 'No worries, see you next time!!')
+        self.assertEqual(self.game.place_piece(self.red_piece, 'q'), self.game.forfeit())
 
     def test_game_over(self):
         self.game.place_piece(self.black_piece, 1)
