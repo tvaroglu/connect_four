@@ -9,7 +9,7 @@ class Prompt:
         return "What is your name?\n > "
 
     def greet_player(self, player_name, player_color):
-        return f"Welcome, {player_name}! Your color is '{player_color}'"
+        return f"Welcome, {player_name}! Your color is '{player_color}'.\n You can (q)uit any time you'd like."
 
     def request_placement(self, player_name):
         return f"Your turn, {player_name}. Please enter a number between 1 and 7 to place a piece into the board:\n > "
