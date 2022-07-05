@@ -6,9 +6,7 @@ class Board:
         self.black_piece = '⬛️'
 
     def column_labels(self):
-        output_list = []
-        for i in self.column_range:
-            output_list.append(f' {str(i)}.  ')
+        output_list = [f' {str(i)}.  ' for i in self.column_range]
         return output_list
 
     def full_column_label(self):
@@ -16,19 +14,15 @@ class Board:
         return f' {joined}'
 
     def row_dividers(self):
-        output_list = []
-        section = '+----'
-        for i in self.column_range:
-            output_list.append(section)
-        output_list[-1] = section + '+'
+        section, final_section = '+----', '+----+'
+        output_list = [section for i in self.column_range]
+        output_list[-1] = final_section
         return output_list
 
     def empty_row(self):
-        output_list = []
-        section = '|    '
-        for i in self.column_range:
-            output_list.append(section)
-        output_list[-1] = section + '|'
+        section, final_section = '|    ', '|    |'
+        output_list = [section for i in self.column_range]
+        output_list[-1] = final_section
         return output_list
 
     def construct_board(self):
