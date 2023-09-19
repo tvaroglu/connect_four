@@ -1,6 +1,16 @@
 class Prompt:
-    def __init__(self):
-        self.default_request = 'y'
+
+    def __init__(self, default_request='y'):
+        self.default_request = default_request
+
+    def invalid_placement(self):
+        return "Sorry! Can't place a piece there, please try another move."
+
+    def piece_placed(self):
+        return 'Nice move!'
+
+    def draw(self):
+        return 'Uh oh! No more slots open... game over!!'
 
     def welcome(self):
         return 'Welcome to ConnectFour!'
