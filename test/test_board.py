@@ -5,45 +5,96 @@ class TestBoard(unittest.TestCase):
     def setUp(self):
         self.board = Board()
 
-    def test_column_labels(self):
-        labels = self.board.column_labels()
-        self.assertEqual(len(labels), 7)
-        counter = 1
-        for l in labels:
-            self.assertEqual(l, f' {str(counter)}.  ')
-            counter += 1
+    def test_get_color(self):
+        default_piece = self.board.default
+        self.assertEqual(default_piece, self.board.get_color(default_piece))
+        red_piece = self.board.red_piece
+        self.assertEqual('red', self.board.get_color(red_piece))
+        black_piece = self.board.black_piece
+        self.assertEqual('black', self.board.get_color(black_piece))
 
-    def test_full_column_label(self):
-        full_label = self.board.full_column_label()
-        self.assertEqual(full_label, '  1.   2.   3.   4.   5.   6.   7.  ')
+    def test_get_piece(self):
+        default_piece = self.board.default
+        self.assertEqual(default_piece, self.board.get_piece(default_piece))
+        red_piece = self.board.red_piece
+        self.assertEqual(red_piece, self.board.get_piece(red_piece))
+        black_piece = self.board.black_piece
+        self.assertEqual(black_piece, self.board.get_piece(black_piece))
 
-    def test_row_dividers(self):
-        dividers = self.board.row_dividers()
-        self.assertEqual(len(dividers), 7)
-        for d in dividers[0:5]:
-            self.assertEqual(d, '+----')
-        self.assertEqual(dividers[6], '+----+')
+    def test_place_piece(self):
+        invalid_placement = self.board.place_piece(self.board.red_piece, 7)
+        self.assertFalse(invalid_placement)
+        valid_placement = self.board.place_piece(self.board.red_piece, 0)
+        self.assertTrue(valid_placement)
+        self.board.place_piece(self.board.black_piece, 0)
+        self.assertEqual(self.board.grid[0][0], self.board.red_piece)
+        self.assertEqual(self.board.grid[0][1], self.board.black_piece)
 
-    def test_empty_row(self):
-        empty_row = self.board.empty_row()
-        self.assertEqual(len(empty_row), 7)
-        for cell in empty_row[0:5]:
-            self.assertEqual(cell, '|    ')
-        self.assertEqual(empty_row[6], '|    |')
+    def test_eval_columns(self):
+        self.board.place_piece(self.board.red_piece, 1)
+        self.board.place_piece(self.board.black_piece, 0)
+        self.board.place_piece(self.board.red_piece, 1)
+        self.board.place_piece(self.board.black_piece, 0)
+        self.board.place_piece(self.board.red_piece, 1)
+        self.board.place_piece(self.board.black_piece, 0)
+        self.board.place_piece(self.board.red_piece, 1)
+        # self.board.print_board()
+        self.assertEqual(self.board.eval_columns(), 'red')
+        self.assertEqual(self.board.eval(), 'red')
 
-    def test_construct_board(self):
-        board = self.board.construct_board()
-        labels = self.board.full_column_label()
-        divider = self.board.row_dividers()
-        empty_row = self.board.empty_row()
-        self.assertEqual(len(board), 14)
-        self.assertEqual(board[0], labels)
-        for index, row in enumerate(board[1:-1]):
-            self.assertEqual(len(row), 7)
-            if index % 2 == 0:
-                self.assertEqual(row, divider)
-            else:
-                self.assertEqual(row, empty_row)
+    def test_eval_rows(self):
+        self.board.place_piece(self.board.black_piece, 0)
+        self.board.place_piece(self.board.red_piece, 0)
+        self.board.place_piece(self.board.black_piece, 1)
+        self.board.place_piece(self.board.red_piece, 1)
+        self.board.place_piece(self.board.black_piece, 2)
+        self.board.place_piece(self.board.red_piece, 2)
+        self.board.place_piece(self.board.black_piece, 3)
+        # self.board.print_board()
+        self.assertEqual(self.board.eval_rows(), 'black')
+        self.assertEqual(self.board.eval(), 'black')
+
+    def test_eval_diagonals_top_right(self):
+        self.board.place_piece(self.board.black_piece, 0)
+        self.board.place_piece(self.board.red_piece, 1)
+        self.board.place_piece(self.board.black_piece, 1)
+        self.board.place_piece(self.board.red_piece, 2)
+        self.board.place_piece(self.board.black_piece, 2)
+        self.board.place_piece(self.board.red_piece, 3)
+        self.board.place_piece(self.board.black_piece, 2)
+        self.board.place_piece(self.board.red_piece, 3)
+        self.board.place_piece(self.board.black_piece, 3)
+        self.board.place_piece(self.board.red_piece, 2)
+        self.board.place_piece(self.board.black_piece, 3)
+        # self.board.print_board()
+        self.assertEqual(self.board.eval_diagonals(), 'black')
+        self.assertEqual(self.board.eval(), 'black')
+
+    def test_eval_diagonals_top_left(self):
+        self.board.place_piece(self.board.black_piece, 6)
+        self.board.place_piece(self.board.red_piece, 5)
+        self.board.place_piece(self.board.black_piece, 5)
+        self.board.place_piece(self.board.red_piece, 4)
+        self.board.place_piece(self.board.black_piece, 4)
+        self.board.place_piece(self.board.red_piece, 3)
+        self.board.place_piece(self.board.black_piece, 4)
+        self.board.place_piece(self.board.red_piece, 3)
+        self.board.place_piece(self.board.black_piece, 3)
+        self.board.place_piece(self.board.red_piece, 4)
+        self.board.place_piece(self.board.black_piece, 3)
+        # self.board.print_board()
+        self.assertEqual(self.board.eval_diagonals(), 'black')
+        self.assertEqual(self.board.eval(), 'black')
+
+    def test_eval_draw(self):
+        for idx, col in enumerate(self.board.grid):
+            for x in range(0, len(col) + 1):
+                if idx % 2 == 0:
+                    self.board.place_piece(self.board.black_piece, x)
+                else:
+                    self.board.place_piece(self.board.red_piece, x)
+        # self.board.print_board()
+        self.assertEqual(self.board.eval(), 'draw')
 
 
 if __name__ == '__main__':
