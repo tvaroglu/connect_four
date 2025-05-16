@@ -5,11 +5,11 @@ from lib.game import Game
 
 class TestGame(unittest.TestCase):
     def setUp(self):
-        self.board = Board(test_mode=True)
+        self.board = Board()
         self.red_piece   = self.board.red_piece
         self.black_piece = self.board.black_piece
         self.player_1 = Player(self.red_piece, 'John')
-        self.player_2 = Player(self.black_piece, 'Jane')
+        self.player_2 = Player(self.black_piece, 'Sarah')
         self.game = Game(self.board, self.player_1, self.player_2)
 
     def test_place_piece(self):
@@ -27,7 +27,6 @@ class TestGame(unittest.TestCase):
                 self.game.place_piece(
                     self.board.red_piece if sub_idx % 2 == 0 \
                         else self.board.black_piece, idx + 1, skynet_turn=True)
-        # self.board.print_board()
         self.assertTrue(self.game.game_over())
 
 
