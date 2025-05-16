@@ -4,13 +4,18 @@ class Prompt:
 
     def __init__(self, default_request='y', test_mode=False) -> None:
         self.default_request = default_request
-        self.test_mode = test_mode
+        self._test_mode = test_mode
 
     @property
     def _assimilating(self):
-        if not self.test_mode:
-            print("\nAssimilating...\n")
-            time.sleep(0.5)
+        if not self._test_mode:
+            judgement_day_counter = '...'
+            print(f'Assimilating{judgement_day_counter}\n')
+            time.sleep(1.0)
+            for idx in range(0, len(judgement_day_counter)):
+                print(f' {judgement_day_counter[idx:]}\n')
+                time.sleep(0.5)
+            print(f'Strategic and tactical assessments completed.')
 
     def invalid_placement(self):
         return "Sorry! Can't place a piece there, please try another move.\n"
