@@ -3,7 +3,7 @@ from lib.board import Board
 
 class TestBoard(unittest.TestCase):
     def setUp(self):
-        self.board = Board(test_mode=True)
+        self.board = Board()
 
     def test_get_color(self):
         default_piece = self.board.default
@@ -38,7 +38,7 @@ class TestBoard(unittest.TestCase):
         self.board.place_piece(self.board.red_piece, 1)
         self.board.place_piece(self.board.black_piece, 0)
         self.board.place_piece(self.board.red_piece, 1)
-        # self.board.print_board()
+        # self.board.render_board()
         self.assertEqual(self.board.eval_columns(), ('red', 1))
         self.assertEqual(self.board.eval(), 'red')
 
@@ -50,7 +50,7 @@ class TestBoard(unittest.TestCase):
         self.board.place_piece(self.board.black_piece, 2)
         self.board.place_piece(self.board.red_piece, 2)
         self.board.place_piece(self.board.black_piece, 3)
-        # self.board.print_board()
+        # self.board.render_board()
         self.assertEqual(self.board.eval_rows(), ('black', 4))
         self.assertEqual(self.board.eval(), 'black')
 
@@ -66,7 +66,7 @@ class TestBoard(unittest.TestCase):
         self.board.place_piece(self.board.black_piece, 3)
         self.board.place_piece(self.board.red_piece, 2)
         self.board.place_piece(self.board.black_piece, 3)
-        # self.board.print_board()
+        # self.board.render_board()
         self.assertEqual(self.board.eval_diagonals(), ('black', None))
         self.assertEqual(self.board.eval(), 'black')
 
@@ -82,7 +82,7 @@ class TestBoard(unittest.TestCase):
         self.board.place_piece(self.board.black_piece, 3)
         self.board.place_piece(self.board.red_piece, 4)
         self.board.place_piece(self.board.black_piece, 3)
-        # self.board.print_board()
+        # self.board.render_board()
         self.assertEqual(self.board.eval_diagonals(), ('black', None))
         self.assertEqual(self.board.eval(), 'black')
 
@@ -93,26 +93,26 @@ class TestBoard(unittest.TestCase):
                     self.board.place_piece(self.board.black_piece, x)
                 else:
                     self.board.place_piece(self.board.red_piece, x)
-        # self.board.print_board()
+        # self.board.render_board()
         self.assertEqual(self.board.eval(), 'draw')
 
     def test_skynet_turn_columns_result(self):
         self.board.place_piece(self.board.red_piece, 1)
         self.board.place_piece(self.board.red_piece, 1)
         self.board.place_piece(self.board.red_piece, 1)
-        # self.board.print_board()
+        # self.board.render_board()
         self.assertEqual(self.board.skynet_turn(0), 1)
 
     def test_skynet_turn_rows_result(self):
         self.board.place_piece(self.board.red_piece, 1)
         self.board.place_piece(self.board.red_piece, 2)
         self.board.place_piece(self.board.red_piece, 3)
-        # self.board.print_board()
+        # self.board.render_board()
         self.assertEqual(self.board.skynet_turn(0), 0)
 
     def test_skynet_turn_random_result(self):
         self.board.place_piece(self.board.red_piece, 1)
-        # self.board.print_board()
+        # self.board.render_board()
         self.assertIn(self.board.skynet_turn(3), (1, 3))
 
 
