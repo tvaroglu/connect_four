@@ -5,7 +5,7 @@ from lib.game import Game
 
 class TestGame(unittest.TestCase):
     def setUp(self):
-        self.board = Board()
+        self.board = Board(test_mode=True)
         self.red_piece   = self.board.red_piece
         self.black_piece = self.board.black_piece
         self.player_1 = Player(self.red_piece, 'John')
