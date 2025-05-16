@@ -6,12 +6,12 @@ class TestPlayer(unittest.TestCase):
         self.red_piece   = '🟥'
         self.black_piece = '⬛️'
         self.player_1 = Player(self.red_piece, 'John')
-        self.player_2 = Player(self.black_piece, 'Jane')
+        self.player_2 = Player(self.black_piece, 'Sarah')
         self.default_player = Player(self.black_piece)
 
     def test_attributes(self):
         self.assertEqual(self.player_1.name, 'John')
-        self.assertEqual(self.player_2.name, 'Jane')
+        self.assertEqual(self.player_2.name, 'Sarah')
         self.assertEqual(self.player_1.color, self.red_piece)
         self.assertEqual(self.player_2.color, self.black_piece)
         self.assertEqual(self.default_player.name, 'Skynet')
