@@ -6,9 +6,9 @@ class TestPrompt(unittest.TestCase):
     def setUp(self):
         self.prompt = Prompt(test_mode=True)
         self.red_piece   = '🟥'
-        self.black_piece = '⬛️'
+        self.blue_piece = '🟦'
         self.player_1 = Player(self.red_piece, 'John')
-        self.player_2 = Player(self.black_piece, 'Sarah')
+        self.player_2 = Player(self.blue_piece, 'Sarah')
 
     def test_welcome(self):
         self.assertEqual(
