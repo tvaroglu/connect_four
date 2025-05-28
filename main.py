@@ -20,7 +20,7 @@ def main():
         # request player 2 name, if applicable:
         name = 'Skynet'
         if game_mode == '2': name = input(prompt.request_name())
-        player_2 = Player(board.black_piece, name=name)
+        player_2 = Player(board.blue_piece, name=name)
         # announce player 2 name and color:
         print(prompt.greet_player(player_2.name, player_2.full_color()))
         # run the game:
