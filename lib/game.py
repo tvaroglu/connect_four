@@ -64,12 +64,20 @@ class Game:
 
     def skynet_turn(self, player_input, eval_color='red'):
         result = placement = None
-        selection = self.board.eval(seq_number=3, eval_color=eval_color)
-        if selection is None:
-            floor, ciel = -2, 0  # -1, 1
-            input = int(player_input)
-            selection = random.choice([(input + floor), (input + ciel)])
-        # print('selection: ', selection)
-        # return selection
-        result = self.place_piece(self.player_2.color, selection, skynet_turn=True)
+        winning_move = self.board.eval(seq_number=3, eval_color='blue')
+        if winning_move is not None:
+            result = self.place_piece(self.player_2.color, winning_move, skynet_turn=True)
+            return result
+        blocking_move = self.board.eval(seq_number=3, eval_color='red')
+        if blocking_move is not None:
+            result = self.place_piece(self.player_2.color, blocking_move, skynet_turn=True)
+            return result
+        # fallback to random choice following player's most recent move:
+        try:
+            floor, ceil = -2, 0  # -1, 1
+            input_col = int(player_input)
+            selection = random.choice([input_col + floor, input_col + ceil])
+            result = self.place_piece(self.player_2.color, selection, skynet_turn=True)
+        except ValueError:
+            result = None
         return result
