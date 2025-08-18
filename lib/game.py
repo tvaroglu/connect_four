@@ -63,21 +63,29 @@ class Game:
         return result, placement
 
     def skynet_turn(self, player_input, eval_color='red'):
-        result = placement = None
-        winning_move = self.board.eval(seq_number=3, eval_color='blue')
+        result = None
+        # assimilate winning move:
+        winning_move = self.board.eval(seq_number=4, eval_color='blue')
+        if winning_move is None:
+            # assimilate 3-in-a-row for blue:
+            winning_move = self.board.eval(seq_number=3, eval_color='blue')
+        if winning_move is None:
+            # attempt to block 3-in-a-row for red:
+            winning_move = self.board.eval(seq_number=3, eval_color='red')
         if winning_move is not None:
-            result = self.place_piece(self.player_2.color, winning_move, skynet_turn=True)
-            return result
-        blocking_move = self.board.eval(seq_number=3, eval_color='red')
-        if blocking_move is not None:
-            result = self.place_piece(self.player_2.color, blocking_move, skynet_turn=True)
-            return result
-        # fallback to random choice following player's most recent move:
+            return self.place_piece(
+                self.player_2.color, winning_move, skynet_turn=True)
+        # fallback logic for semi-random strategy if no prior strategic assimilation:
         try:
-            floor, ceil = -2, 0  # -1, 1
             input_col = int(player_input)
-            selection = random.choice([input_col + floor, input_col + ceil])
-            result = self.place_piece(self.player_2.color, selection, skynet_turn=True)
-        except ValueError:
-            result = None
-        return result
+            candidates = [input_col - 2, input_col - 1, input_col]
+            valid_choices = [col for col in candidates if 0 <= col < 7]
+            while valid_choices:
+                selection = random.choice(valid_choices)
+                if self.place_piece(self.player_2.color, selection, skynet_turn=True):
+                    return True
+                else:
+                    valid_choices.remove(selection)
+        except (ValueError, TypeError):
+            pass
+        return False
