@@ -38,10 +38,10 @@ class TestGame(unittest.TestCase):
         self.assertEqual(self.game.skynet_turn(0), 1)
 
     def test_skynet_turn_rows_result(self):
-        self.board.place_piece(self.board.red_piece, 1)
-        self.board.place_piece(self.board.red_piece, 2)
-        self.board.place_piece(self.board.red_piece, 3)
-        # self.board.render_board()
+        self.game.board.place_piece(self.board.red_piece, 1)
+        self.game.board.place_piece(self.board.red_piece, 2)
+        self.game.board.place_piece(self.board.red_piece, 3)
+        # self.game.board.render_board()
         self.assertTrue(self.game.skynet_turn(0))
 
     def test_skynet_turn_random_result(self):
