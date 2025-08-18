@@ -1,21 +1,42 @@
+import time
+
 class Prompt:
-    def __init__(self):
-        self.default_request = 'y'
+
+    def __init__(self, default_request='y', test_mode=False) -> None:
+        self.default_request = default_request
+        self._test_mode = test_mode
+
+    @property
+    def _assimilating(self):
+        if not self._test_mode:
+            judgement_day_counter = '...'
+            print(f'Assimilating{judgement_day_counter}\n')
+            time.sleep(1.0)
+            for idx in range(0, len(judgement_day_counter)):
+                print(f' {judgement_day_counter[idx:]}\n')
+                time.sleep(0.5)
+            print(f'Strategic and tactical assessments completed.')
+
+    def invalid_placement(self):
+        return "Sorry! Can't place a piece there, please try another move.\n"
+
+    def piece_placed(self):
+        return 'Nice move!'
+
+    def draw(self):
+        return 'Uh oh! No more slots open... game over!!'
 
     def welcome(self):
-        return 'Welcome to ConnectFour!'
+        return 'Welcome to ConnectFour!\n'
 
     def request_name(self):
         return "What is your name?\n > "
 
     def greet_player(self, player_name, player_color):
-        return f"Welcome, {player_name}! Your color is '{player_color}'"
+        return f"Welcome, {player_name}! Your color is {player_color}.\n"
 
     def request_placement(self, player_name):
         return f"Your turn, {player_name}. Please enter a number between 1 and 7 to place a piece into the board:\n > "
-
-    def line_break(self):
-        return "\n"
 
     def start_game(self):
         return "Let's play!"
@@ -24,18 +45,17 @@ class Prompt:
         return "Would you like to play again? (y/n)\n > "
 
     def end_game(self):
-        return "Game exiting...\n Goodbye!"
+        return "\nGame exiting...\n Goodbye!"
 
     def announce_victor(self, winning_color):
-        return f'{winning_color} wins!!'
+        return f'{winning_color} wins!!\n'
 
     def sanitize_request(self, user_input):
         return str(user_input.lower()[0])
 
     def request_game_mode(self):
-        return "Please select game mode\n((1) vs (2) player):\n > "
+        return "Please select game mode\n ((1) vs (2) player):\n > "
 
     def game_mode(self, selection='1'):
-        if str(selection) != '2':
-            selection = '1'
-        return f'Entering {selection}-player game mode'
+        if str(selection) != '2': selection = '1'
+        return f'Entering {selection}-player game mode...\n'
