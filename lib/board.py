@@ -19,153 +19,165 @@ class Board:
         |-------------------------------------------------------|
         '''
         self.column_range = range(1, 8)
-        self.default     = '  '
-        self.red_piece   = '🟥'
-        self.blue_piece  = '🟦'
-        self.grid = [list(self.default * 3) for i in self.column_range]
+        self.default    = ' '
+        self.red_piece  = '🟥'
+        self.blue_piece = '🟦'
+        self.grid = [[self.default] * 6 for _ in self.column_range]
 
     def eval(self, seq_number=4, eval_color='red'):
-        board_full = all([len([slot for slot in col \
-                               if slot in (self.red_piece, self.blue_piece)]) == 6 \
-                                for col in self.grid])
+        '''
+        Public evaluation wrapper for rows, columns, and diagonals
+        '''
+        board_full = all(
+            sum(slot in (self.red_piece, self.blue_piece) for slot in col) == 6
+            for col in self.grid
+        )
         if board_full: return 'draw'
-        eval = {
-            'columns':   self.eval_columns(seq_number=seq_number),
-            'rows':      self.eval_rows(seq_number=seq_number),
-            'diagonals': self.eval_diagonals(seq_number=seq_number) \
-                if seq_number == 4 else None,
+        evaluators = {
+            'columns':   self.eval_columns(seq_number),
+            'rows':      self.eval_rows(seq_number),
+            'diagonals': self.eval_diagonals(seq_number),
         }
-        results = [(criteria, result) for criteria, result in eval.items() if result]
-        result = results[0][1] if len(results) > 0 else None
-        # 2-player mode; return winning color to determine winner:
-        if result and seq_number == 4: result = result[0]
-        # Skynet turn (1-player mode); return col idx to block the other player's win:
-        if result and seq_number == 3: result = result[1] \
-            if result[0] == eval_color else None
-        return result
-
-    def eval_diagonals(self, seq_number=4):
-        result_red = result_bl = False
-        red, bl = self.red_piece, self.blue_piece
-        cols = len(self.grid)
-        rows = max(len(col) for col in self.grid)
-        # Check diagonals starting from the top-left corner:
-        results = []
-        for col in range(cols):
-            for row in range(rows):
-                if row + seq_number <= rows and col + seq_number <= cols:
-                    # Check the diagonal sequence from (col, row)
-                    results = [self.grid[col + x][row + x] for x in range(seq_number)]
-                    sequence = ''.join(results)
-                    result_red = red * seq_number in sequence
-                    result_bl = bl * seq_number in sequence
-                    if result_red: return 'red', None
-                    if result_bl: return 'blue', None
-        # Check diagonals starting from the top-right corner:
-        results = []
-        for col in range(cols):
-            for row in range(rows - 1, -1, -1):
-                if row - seq_number + 1 >= 0 and col + seq_number <= cols:
-                    # Check the diagonal sequence from (col, row)
-                    results = [self.grid[col + x][row - x] for x in range(seq_number)]
-                    sequence = ''.join(results)
-                    result_red = red * seq_number in sequence
-                    result_bl = bl * seq_number in sequence
-                    if result_red: return 'red', None
-                    if result_bl: return 'blue', None
-
-    def eval_rows(self, seq_number=4):
-        result_red = result_bl = False
-        red, bl = self.red_piece, self.blue_piece
-        for idx, col in enumerate(self.grid):
-            row = [self.grid[sub_idx][idx] for sub_idx in range(0, len(self.grid)) \
-                   if idx < len(self.grid[sub_idx]) - 1]
-            sequence, block_idx = ''.join(row), 0
-            if seq_number == 3:
-                if red * seq_number + ' ' in sequence:
-                    target = f'{self.red_piece} '
-                    result_red, block_idx = True, sequence.index(target)
-                if ' ' + red * seq_number in sequence:
-                    target = f' {self.red_piece}'
-                    result_red, block_idx = True, sequence.index(target)
-                if bl * seq_number + ' ' in sequence:
-                    target = f'{self.blue_piece} '
-                    result_bl, block_idx = True, sequence.index(target)
-                if ' ' + bl * seq_number in sequence:
-                    target = f' {self.blue_piece}'
-                    result_bl, block_idx = True, sequence.index(target)
-            else:
-                result_red = red * seq_number in sequence
-                result_bl = bl * seq_number in sequence
-            try:
-                if result_red:
-                    # import pdb; pdb.set_trace()
-                    return 'red', row.index(' ', block_idx) if ' ' in row else None
-                if result_bl:
-                    return 'blue', row.index(' ', block_idx) if ' ' in row else None
-            except ValueError:
-                seq_number = seq_number + 1 if 1 <= seq_number < 7 else seq_number - 1
-                return self.eval_rows(seq_number=seq_number)
+        for _, result in evaluators.items():
+            if result:
+                if seq_number == 4:
+                    return result[0]
+                if seq_number == 3 and result[0] == eval_color:
+                    return result[1]
+        return None
 
     def eval_columns(self, seq_number=4):
-        result_red = result_bl = False
+        return self._scan_lines(kind='cols', seq_number=seq_number, win_index=True)
+
+    def eval_rows(self, seq_number=4):
+        return self._scan_lines(kind='rows', seq_number=seq_number, win_index=False)
+
+    def eval_diagonals(self, seq_number=4):
+        return self._scan_lines(kind='diags', seq_number=seq_number, win_index=False)
+
+    def _get_piece(self, c, r):
+        '''
+        return token at (c, r) or self.default if beyond current fill
+        '''
+        return self.grid[c][r] if r < len(self.grid[c]) else self.default
+
+    def _is_valid_drop(self, c, r):
+        '''
+        valid only if r equals current filled height of column c
+        '''
+        filled = sum(1 for slot in self.grid[c] if slot in (self.red_piece, self.blue_piece))
+        return r == filled
+
+    def _lines(self, kind):
+        '''
+        Yield lists of (c, r) indices: rows, columns, or diagonals. Only lines with length >= 4.
+        '''
+        cols, rows = 7, 6
+        if kind in ('rows', 'all'):
+            for r in range(rows):
+                yield [(c, r) for c in range(cols)]
+        if kind in ('cols', 'all'):
+            for c in range(cols):
+                yield [(c, r) for r in range(rows)]
+        if kind in ('diags', 'all'):
+            # bottom-left -> top-right:
+            for c0 in range(cols):
+                diag = []
+                c, r = c0, 0
+                while 0 <= c < cols and 0 <= r < rows:
+                    diag.append((c, r)); c += 1; r += 1
+                if len(diag) >= 4:
+                    yield diag
+            for r0 in range(1, rows):
+                diag = []
+                c, r = 0, r0
+                while 0 <= c < cols and 0 <= r < rows:
+                    diag.append((c, r)); c += 1; r += 1
+                if len(diag) >= 4:
+                    yield diag
+            # top-left -> bottom-right:
+            for c0 in range(cols):
+                diag = []
+                c, r = c0, rows - 1
+                while 0 <= c < cols and 0 <= r < rows:
+                    diag.append((c, r)); c += 1; r -= 1
+                if len(diag) >= 4:
+                    yield diag
+            for r0 in range(rows - 2, -1, -1):
+                diag = []
+                c, r = 0, r0
+                while 0 <= c < cols and 0 <= r < rows:
+                    diag.append((c, r)); c += 1; r -= 1
+                if len(diag) >= 4:
+                    yield diag
+
+    def _scan_lines(self, kind, seq_number, win_index=False):
+        '''
+        Scan the given line kind using 4-length sliding windows.
+        Returns:
+          - (color, col_idx) on 4-in-a-row win if win_index=True (columns)
+          - (color, None)   on 4-in-a-row win if win_index=False (rows/diags)
+          - (color, col_idx) on 3+empty where empty is a valid drop
+          - None otherwise
+        '''
         red, bl = self.red_piece, self.blue_piece
-        for idx, col in enumerate(self.grid):
-            sequence = ''.join(col)
-            if seq_number == 3:
-                result_red = red * seq_number + ' ' in sequence
-                result_bl = bl * seq_number + ' ' in sequence
-            else:
-                result_red = red * seq_number in sequence
-                result_bl = bl * seq_number in sequence
-            if result_red: return 'red', idx
-            if result_bl: return 'blue', idx
+        for indices in self._lines(kind):
+            # slide a 4-wide window over this line:
+            for start in range(0, len(indices) - 4 + 1):
+                window_idx = indices[start:start + 4]
+                pieces = [self._get_piece(c, r) for c, r in window_idx]
+                if seq_number == 4:
+                    if pieces == [red]*4:
+                        payload = window_idx[0][0] if win_index else None
+                        return ('red', payload)
+                    if pieces == [bl]*4:
+                        payload = window_idx[0][0] if win_index else None
+                        return ('blue', payload)
+                elif seq_number == 3:
+                    for color, token in (('red', red), ('blue', bl)):
+                        if pieces.count(token) == 3 and pieces.count(self.default) == 1:
+                            i = pieces.index(self.default)
+                            c, r = window_idx[i]
+                            if self._is_valid_drop(c, r):
+                                return (color, c)
+        return None
 
     def place_piece(self, color, column_idx):
-        try:
-            valid_placement = len([slot for slot in self.grid[column_idx] \
-                                if slot not in (self.red_piece, self.blue_piece)]) > 0
-        except IndexError:
-            valid_placement = False
-        if not valid_placement: return False
-        for row_idx, slot in enumerate(self.grid[column_idx]):
-            if slot not in (self.red_piece, self.blue_piece):
-                self.grid[column_idx][row_idx] = color
+        if not (0 <= column_idx < 7): return False
+        col = self.grid[column_idx]
+        for i in range(len(col)):
+            if col[i] not in (self.red_piece, self.blue_piece):
+                self.grid[column_idx][i] = color
                 return True
+        return False
 
     def get_color(self, piece):
-        result = self.default
-        if piece == self.red_piece: result = 'red'
-        if piece == self.blue_piece: result = 'blue'
-        return result
+        if piece == self.red_piece: return 'red'
+        if piece == self.blue_piece: return 'blue'
+        return self.default
 
     def get_piece(self, slot):
-        result = self.default
-        if slot == self.red_piece: result = self.red_piece
-        if slot == self.blue_piece: result = self.blue_piece
-        return result
+        return slot if slot in (self.red_piece, self.blue_piece) else self.default
 
     def render_row(self, row, row_idx):
         divider = '------' * 6
         print(''.join(row).replace('||', '|'))
         if row_idx == 6:
-            result = ''
-            for i in self.column_range: result += f'  {i}. '
-            print(result)
+            print(''.join([f'  {i}. ' for i in self.column_range]))
         print(divider)
 
     def render_board(self, result=[], row_idx=6):
         self.render_row(result, row_idx)
         if row_idx <= 0: return
-        slot, result = '|    ', []
+        new_row = []
         for col in self.grid:
-            row = ''
             try:
-                formatted = slot.replace(
-                    '    ', f' {self.get_piece(col[row_idx - 1])} ')
+                slot = self.get_piece(col[row_idx - 1])
             except IndexError:
-                formatted = slot
-            row += formatted
-            result.append(f'{row}|')
-        row_idx -= 1
-        return self.render_board(result=result, row_idx=row_idx)
+                slot = self.default
+            if slot == self.default:
+                piece = '    '       # 4 spaces for an empty cell
+            else:
+                piece = f' {slot} '  # center the emoji in 4 spaces
+            new_row.append(f'|{piece}|')
+        return self.render_board(result=new_row, row_idx=row_idx - 1)
