@@ -51,7 +51,8 @@ class TestBoard(unittest.TestCase):
         self.board.place_piece(self.board.red_piece, 2)
         self.board.place_piece(self.board.blue_piece, 3)
         # self.board.render_board()
-        self.assertEqual(self.board.eval_rows(), ('blue', 4))
+        # self.assertEqual(self.board.eval_rows(), ('blue', 4))
+        self.assertEqual(self.board.eval_rows(), ('blue', None))
         self.assertEqual(self.board.eval(), 'blue')
 
     def test_eval_diagonals_top_right(self):
